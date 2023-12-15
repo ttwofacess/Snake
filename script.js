@@ -50,6 +50,16 @@ const drawSquare = (square, type) => {
     }
 }
 
+const updateScore = () => {
+    scoreBoard.innerText = score;
+}
+
+const createRandomFood = () => {
+    const randomEmptySquare = emptySquares[Math.floor(Math.random() * emptySquares.length)];
+    drawSquare(randomEmptySquare, 'foodSquare');
+
+}
+
 const createBoard = () => {
     boardSquares.forEach((row, rowIndex) => {
         row.forEach((column, columnIndex) => {
@@ -79,6 +89,8 @@ const startGame = () => {
     gameOverSign.style.display = 'none';
     startButton.disabled = true;
     drawSnake();
+    updateScore();
+    createRandomFood();
 }
 
 startButton.addEventListener('click', startGame);
