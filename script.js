@@ -50,14 +50,35 @@ const drawSquare = (square, type) => {
     }
 }
 
-const updateScore = () => {
-    scoreBoard.innerText = score;
+const setDirection = newDirection => {
+    direction = newDirection;
 }
+
+const directionEvent = key => {
+    switch(key.code) {
+        case 'ArrowUp':
+            direction != directions.ArrowDown && setDirection(key.code)
+            break;
+        case 'ArrowDown':
+            direction != directions.ArrowUp && setDirection(key.code)
+            break;
+        case 'ArrowLeft':
+            direction != directions.ArrowRight && setDirection(key.code)
+            break;
+        case 'ArrowRight':
+            direction != directions.ArrowLeft && setDirection(key.code)
+            break;
+        }
+    }        
 
 const createRandomFood = () => {
     const randomEmptySquare = emptySquares[Math.floor(Math.random() * emptySquares.length)];
     drawSquare(randomEmptySquare, 'foodSquare');
 
+}
+
+const updateScore = () => {
+    scoreBoard.innerText = score;
 }
 
 const createBoard = () => {
@@ -91,6 +112,7 @@ const startGame = () => {
     drawSnake();
     updateScore();
     createRandomFood();
+    document.addEventListener('keydown', control);
 }
 
 startButton.addEventListener('click', startGame);
