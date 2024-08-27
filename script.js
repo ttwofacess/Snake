@@ -109,6 +109,46 @@ const directionEvent = key => {
         }
     }        
 
+// Nuevo código para manejar eventos táctiles
+let touchStartX = 0;
+let touchStartY = 0;
+
+const handleTouchStart = (event) => {
+    touchStartX = event.touches[0].clientX;
+    touchStartY = event.touches[0].clientY;
+}
+
+const handleTouchMove = (event) => {
+    if (!touchStartX || !touchStartY) {
+        return;
+    }
+
+    const touchEndX = event.touches[0].clientX;
+    const touchEndY = event.touches[0].clientY;
+
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+        // Deslizamiento horizontal
+        if (diffX > 0) {
+            directionEvent({ code: 'ArrowLeft' });
+        } else {
+            directionEvent({ code: 'ArrowRight' });
+        }
+    } else {
+        // Deslizamiento vertical
+        if (diffY > 0) {
+            directionEvent({ code: 'ArrowUp' });
+        } else {
+            directionEvent({ code: 'ArrowDown' });
+        }
+    }
+
+    touchStartX = 0;
+    touchStartY = 0;
+}
+
 const createRandomFood = () => {
     const randomEmptySquare = emptySquares[Math.floor(Math.random() * emptySquares.length)];
     drawSquare(randomEmptySquare, 'foodSquare');
@@ -152,6 +192,10 @@ const startGame = () => {
     createRandomFood();
     /* document.addEventListener('keydown', control); */
     document.addEventListener('keydown', directionEvent);
+    // Agregar eventos táctiles
+    document.addEventListener('touchstart', handleTouchStart);
+    document.addEventListener('touchmove', handleTouchMove);
+    
     moveInterval = setInterval( () => moveSnake(), gameSpeed);
 }
 
